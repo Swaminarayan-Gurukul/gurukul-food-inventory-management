@@ -6,14 +6,14 @@
  */
 import { SS, MASTER_SHEET_NAME } from './CONSTANTS';
 
-export function addNewItem(name, unit) {
+export function addNewItem(name, unit, category) {
    try {
     const masterSheet = SS.getSheetByName(MASTER_SHEET_NAME);
     const itemNames = masterSheet.getRange(2, 1, masterSheet.getLastRow(), 1).getValues();
     if (itemNames.some(row => row[0] && row[0].toString().toLowerCase() === name.toString().toLowerCase())) {
       throw new Error(`Item "${name}" already exists.`);
     }
-    masterSheet.appendRow([name, unit]);
+    masterSheet.appendRow([name, unit, category || '']);
     return `Successfully added ${name}.`;
   } catch (e) {
     Logger.log(`Error in addNewItem: ${e.message}`);

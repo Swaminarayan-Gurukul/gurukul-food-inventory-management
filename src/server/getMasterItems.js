@@ -18,7 +18,12 @@ export function getMasterItems() {
 
     const items = {};
     for (let i = 1; i < data.length; i++) {
-      if (data[i][0]) items[data[i][0]] = data[i][1];
+      if (data[i][0]) {
+        items[data[i][0]] = {
+          unit: data[i][1],
+          category: data[i][2] || ''
+        };
+      }
     }
     return items;
   } catch(e) {

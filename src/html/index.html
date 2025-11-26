@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,41 +10,57 @@
     <style>
         :root {
             /* Default theme color, will be overridden by the config sheet */
-            --primary-color: #f97316; 
+            --primary-color: #f97316;
             --primary-color-darker: #ea580c;
         }
 
         body {
             font-family: 'Inter', sans-serif;
         }
+
         .item-row:hover {
             background-color: #f9fafb;
         }
+
         /* Modal styles */
         .modal-backdrop {
             transition: opacity 0.3s ease;
         }
+
         .modal-content {
             transition: transform 0.3s ease;
         }
 
         /* Classes using the dynamic theme color */
-        .primary-text { color: var(--primary-color); }
-        .primary-bg { background-color: var(--primary-color); }
-        .primary-bg:hover { background-color: var(--primary-color-darker); }
-        .primary-ring-focus:focus { --tw-ring-color: var(--primary-color); }
+        .primary-text {
+            color: var(--primary-color);
+        }
+
+        .primary-bg {
+            background-color: var(--primary-color);
+        }
+
+        .primary-bg:hover {
+            background-color: var(--primary-color-darker);
+        }
+
+        .primary-ring-focus:focus {
+            --tw-ring-color: var(--primary-color);
+        }
 
         .tab-button.active {
             border-bottom-color: var(--primary-color);
             color: var(--primary-color);
             font-weight: 600;
         }
+
         .tab-button {
-             border-bottom-width: 4px;
-             border-color: transparent;
+            border-bottom-width: 4px;
+            border-color: transparent;
         }
     </style>
 </head>
+
 <body class="bg-gray-100 text-gray-800">
 
     <div class="container mx-auto max-w-4xl p-4">
@@ -58,9 +75,13 @@
             <!-- Tab Buttons -->
             <div class="border-b border-gray-200">
                 <nav class="-mb-px flex gap-6 px-6">
-                    <button onclick="changeTab('inventory')" class="tab-button active py-4 px-1 font-medium text-lg">Inventory</button>
-                    <button onclick="changeTab('menu')" class="tab-button py-4 px-1 font-medium text-lg text-gray-500 hover:text-[var(--primary-color)] hover:border-gray-300">Menu</button>
-                    <button onclick="changeTab('report')" class="tab-button py-4 px-1 font-medium text-lg text-gray-500 hover:text-[var(--primary-color)] hover:border-gray-300">Daily Report</button>
+                    <button onclick="changeTab('inventory')"
+                        class="tab-button active py-4 px-1 font-medium text-lg">Inventory</button>
+                    <button onclick="changeTab('menu')"
+                        class="tab-button py-4 px-1 font-medium text-lg text-gray-500 hover:text-[var(--primary-color)] hover:border-gray-300">Menu</button>
+                    <button onclick="changeTab('report')"
+                        class="tab-button py-4 px-1 font-medium text-lg text-gray-500 hover:text-[var(--primary-color)] hover:border-gray-300">Daily
+                        Report</button>
                 </nav>
             </div>
 
@@ -68,6 +89,18 @@
             <div class="p-6">
                 <!-- INVENTORY TAB -->
                 <div id="inventory-tab">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-semibold">Inventory</h2>
+                        <!-- Global Transaction Mode Toggle -->
+                        <div class="bg-gray-200 p-1 rounded-lg flex text-sm font-medium">
+                            <button id="mode-out" onclick="setGlobalTransactionMode('OUT')"
+                                class="px-4 py-2 rounded-md transition-all shadow-sm bg-white text-gray-800">Stock
+                                OUT</button>
+                            <button id="mode-in" onclick="setGlobalTransactionMode('IN')"
+                                class="px-4 py-2 rounded-md transition-all text-gray-500 hover:text-gray-700">Stock
+                                IN</button>
+                        </div>
+                    </div>
                     <div id="loading" class="text-center py-8">
                         <p class="text-gray-500">Loading inventory...</p>
                     </div>
@@ -78,14 +111,22 @@
                     <div class="mt-8 pt-6 border-t">
                         <h2 class="text-2xl font-semibold mb-4">Add New Inventory Item</h2>
                         <div class="flex flex-col sm:flex-row gap-4">
-                            <input id="newItemName" type="text" placeholder="Item Name (e.g., Rice)" class="flex-grow p-3 border rounded-lg focus:outline-none focus:ring-2 primary-ring-focus">
-                            <select id="newItemUnit" class="w-full sm:w-40 p-3 border rounded-lg focus:outline-none focus:ring-2 primary-ring-focus">
+                            <input id="newItemName" type="text" placeholder="Item Name (e.g., Rice)"
+                                class="flex-grow p-3 border rounded-lg focus:outline-none focus:ring-2 primary-ring-focus">
+                            <input id="newItemCategory" list="category-list" type="text"
+                                placeholder="Category (e.g., Grain)"
+                                class="flex-grow sm:flex-grow-0 sm:w-48 p-3 border rounded-lg focus:outline-none focus:ring-2 primary-ring-focus">
+                            <datalist id="category-list"></datalist>
+                            <select id="newItemUnit"
+                                class="w-full sm:w-32 p-3 border rounded-lg focus:outline-none focus:ring-2 primary-ring-focus">
                                 <option value="kg">kg</option>
                                 <option value="g">g</option>
                                 <option value="pcs">pcs</option>
                                 <option value="litre">litre</option>
                             </select>
-                            <button id="addItemBtn" class="primary-bg text-white font-semibold py-3 px-6 rounded-lg transition duration-300">Add Item</button>
+                            <button id="addItemBtn"
+                                class="primary-bg text-white font-semibold py-3 px-6 rounded-lg transition duration-300">Add
+                                Item</button>
                         </div>
                         <p id="add-item-status" class="text-center mt-4 text-sm"></p>
                     </div>
@@ -96,16 +137,22 @@
                     <h2 class="text-2xl font-semibold mb-4">Menu & Recipe Management</h2>
                     <div class="space-y-6 bg-gray-50 p-6 rounded-lg border">
                         <div>
-                             <label for="menu-item-name" class="block text-sm font-medium text-gray-700">New Menu Item Name</label>
-                             <input type="text" id="menu-item-name" placeholder="e.g., Dal Fry" class="mt-1 w-full p-2 border rounded-lg focus:outline-none focus:ring-2 primary-ring-focus">
+                            <label for="menu-item-name" class="block text-sm font-medium text-gray-700">New Menu Item
+                                Name</label>
+                            <input type="text" id="menu-item-name" placeholder="e.g., Dal Fry"
+                                class="mt-1 w-full p-2 border rounded-lg focus:outline-none focus:ring-2 primary-ring-focus">
                         </div>
                         <div>
                             <h3 class="text-lg font-semibold text-gray-800">Ingredients</h3>
                             <div id="ingredients-container" class="mt-2 space-y-2"></div>
-                            <button onclick="addIngredientRow()" class="mt-2 text-sm font-semibold primary-text hover:text-[var(--primary-color-darker)]">+ Add Ingredient</button>
+                            <button onclick="addIngredientRow()"
+                                class="mt-2 text-sm font-semibold primary-text hover:text-[var(--primary-color-darker)]">+
+                                Add Ingredient</button>
                         </div>
                         <div class="text-center">
-                            <button id="saveRecipeBtn" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition duration-300 w-full sm:w-auto">Save New Menu Item</button>
+                            <button id="saveRecipeBtn"
+                                class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition duration-300 w-full sm:w-auto">Save
+                                New Menu Item</button>
                             <p id="recipe-status" class="text-center mt-4 text-sm"></p>
                         </div>
                     </div>
@@ -122,31 +169,43 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <label for="report-date" class="block text-sm font-medium text-gray-700">Date</label>
-                                <input type="date" id="report-date" class="mt-1 w-full p-2 border rounded-lg focus:outline-none focus:ring-2 primary-ring-focus">
+                                <input type="date" id="report-date"
+                                    class="mt-1 w-full p-2 border rounded-lg focus:outline-none focus:ring-2 primary-ring-focus">
                             </div>
                             <div>
                                 <label for="report-meal" class="block text-sm font-medium text-gray-700">Meal</label>
-                                <select id="report-meal" class="mt-1 w-full p-2 border rounded-lg focus:outline-none focus:ring-2 primary-ring-focus">
-                                    <option>Breakfast</option> <option>Lunch</option> <option>Dinner</option>
+                                <select id="report-meal"
+                                    class="mt-1 w-full p-2 border rounded-lg focus:outline-none focus:ring-2 primary-ring-focus">
+                                    <option>Breakfast</option>
+                                    <option>Lunch</option>
+                                    <option>Dinner</option>
                                 </select>
                             </div>
                             <div>
-                                <label for="report-people" class="block text-sm font-medium text-gray-700">People Served</label>
-                                <input type="number" id="report-people" placeholder="e.g., 150" class="mt-1 w-full p-2 border rounded-lg focus:outline-none focus:ring-2 primary-ring-focus">
+                                <label for="report-people" class="block text-sm font-medium text-gray-700">People
+                                    Served</label>
+                                <input type="number" id="report-people" placeholder="e.g., 150"
+                                    class="mt-1 w-full p-2 border rounded-lg focus:outline-none focus:ring-2 primary-ring-focus">
                             </div>
                         </div>
                         <div>
                             <h3 class="text-lg font-semibold text-gray-800">Menu Items Cooked</h3>
                             <div id="cooked-items-container" class="mt-2 space-y-2"></div>
-                            <button onclick="addCookedItemRow()" class="mt-2 text-sm font-semibold primary-text hover:text-[var(--primary-color-darker)]">+ Add Menu Item</button>
+                            <button onclick="addCookedItemRow()"
+                                class="mt-2 text-sm font-semibold primary-text hover:text-[var(--primary-color-darker)]">+
+                                Add Menu Item</button>
                         </div>
                         <div>
                             <h3 class="text-lg font-semibold text-gray-800">Raw Food Waste</h3>
                             <div id="waste-items-container" class="mt-2 space-y-2"></div>
-                            <button onclick="addWasteItemRow()" class="mt-2 text-sm font-semibold primary-text hover:text-[var(--primary-color-darker)]">+ Add Waste Item</button>
+                            <button onclick="addWasteItemRow()"
+                                class="mt-2 text-sm font-semibold primary-text hover:text-[var(--primary-color-darker)]">+
+                                Add Waste Item</button>
                         </div>
                         <div class="text-center">
-                            <button id="submitReportBtn" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition duration-300 w-full sm:w-auto">Submit Daily Report</button>
+                            <button id="submitReportBtn"
+                                class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition duration-300 w-full sm:w-auto">Submit
+                                Daily Report</button>
                             <p id="report-status" class="text-center mt-4 text-sm"></p>
                         </div>
                     </div>
@@ -156,29 +215,35 @@
     </div>
 
     <!-- Transaction Modal -->
-    <div id="transaction-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden modal-backdrop">
+    <div id="transaction-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden modal-backdrop">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6 modal-content scale-95">
             <h2 id="modal-title" class="text-2xl font-bold mb-4">Update Quantity</h2>
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Transaction Type</label>
-                    <div class="mt-1 grid grid-cols-2 gap-2">
-                        <button id="modal-type-in" onclick="setTransactionType('IN')" class="bg-gray-200 text-gray-800 font-semibold py-3 rounded-lg">IN (Stock In)</button>
-                        <button id="modal-type-out" onclick="setTransactionType('OUT')" class="bg-gray-200 text-gray-800 font-semibold py-3 rounded-lg">OUT (Stock Out)</button>
+                    <div class="mt-1">
+                        <span id="modal-mode-display"
+                            class="inline-block px-3 py-1 rounded-full text-sm font-semibold"></span>
                     </div>
                 </div>
                 <div>
                     <label for="modal-quantity" class="block text-sm font-medium text-gray-700">Quantity</label>
-                    <div class="flex items-center gap-2">
-                        <input id="modal-quantity" type="number" placeholder="Enter quantity" class="mt-1 w-full p-3 border rounded-lg focus:outline-none focus:ring-2 primary-ring-focus">
-                        <select id="modal-unit-select" class="w-32 mt-1 p-3 border rounded-lg focus:outline-none focus:ring-2 primary-ring-focus bg-gray-50"></select>
+                    <div class="flex flex-col gap-2">
+                        <input id="modal-quantity" type="number" placeholder="Enter quantity"
+                            class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 primary-ring-focus">
+                        <div id="modal-unit-buttons" class="flex gap-2 mt-1">
+                            <!-- Buttons injected by JS -->
+                        </div>
                     </div>
                 </div>
             </div>
             <div id="modal-error" class="text-red-500 text-sm mt-4"></div>
             <div class="mt-6 flex justify-end gap-4">
-                <button onclick="closeModal()" class="bg-gray-300 text-gray-800 font-semibold py-2 px-6 rounded-lg hover:bg-gray-400 transition">Cancel</button>
-                <button id="modal-submit-btn" class="bg-green-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-600 transition">Submit</button>
+                <button onclick="closeModal()"
+                    class="bg-gray-300 text-gray-800 font-semibold py-2 px-6 rounded-lg hover:bg-gray-400 transition">Cancel</button>
+                <button id="modal-submit-btn"
+                    class="bg-green-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-green-600 transition">Submit</button>
             </div>
         </div>
     </div>
@@ -191,31 +256,31 @@
             window.google = {
                 script: {
                     run: {
-                        _mockData: { "Rice": { quantity: 50, unit: "kg" }, "Sugar": { quantity: 25, unit: "kg" }, "Lentils": { quantity: 15.5, unit: "kg" }},
+                        _mockData: { "Rice": { quantity: 50, unit: "kg", category: "Grain" }, "Sugar": { quantity: 25, unit: "kg", category: "Pantry" }, "Lentils": { quantity: 15.5, unit: "kg", category: "Grain" } },
                         _mockRecipes: { "Dal Fry": [{ name: "Lentils", quantity: 0.1, unit: "kg" }, { name: "Spices", quantity: 10, unit: "g" }] },
                         _mockConfig: { AppName: "Gurukul Test Kitchen", PrimaryColor: "#2563eb" },
-                        withSuccessHandler: function(cb) { this._success = cb; return this; },
-                        withFailureHandler: function(cb) { this._failure = cb; return this; },
-                        getInitialData: function() {
-                            if (this._success) setTimeout(() => this._success({inventory: this._mockData, recipes: this._mockRecipes, config: this._mockConfig }), 500);
+                        withSuccessHandler: function (cb) { this._success = cb; return this; },
+                        withFailureHandler: function (cb) { this._failure = cb; return this; },
+                        getInitialData: function () {
+                            if (this._success) setTimeout(() => this._success({ inventory: this._mockData, recipes: this._mockRecipes, config: this._mockConfig }), 500);
                         },
-                        addTransaction: function(itemName, type, quantity) {
+                        addTransaction: function (itemName, type, quantity) {
                             if (type === 'IN') this._mockData[itemName].quantity += quantity; else this._mockData[itemName].quantity -= quantity;
                             if (this._success) setTimeout(() => this._success("Transaction successful."), 500);
                         },
-                        addNewItem: function(name, unit) {
-                             if (this._mockData[name]) { if (this._failure) setTimeout(() => this._failure({ message: `Item "${name}" already exists.` }), 500); return; }
-                            this._mockData[name] = { quantity: 0, unit: unit };
+                        addNewItem: function (name, unit, category) {
+                            if (this._mockData[name]) { if (this._failure) setTimeout(() => this._failure({ message: `Item "${name}" already exists.` }), 500); return; }
+                            this._mockData[name] = { quantity: 0, unit: unit, category: category };
                             if (this._success) setTimeout(() => this._success(`Successfully added "${name}".`), 500);
                         },
-                        addRecipe: function(recipe) {
-                             if (this._mockRecipes[recipe.name]) { if (this._failure) setTimeout(() => this._failure({ message: `Recipe "${recipe.name}" already exists.` }), 500); return; }
+                        addRecipe: function (recipe) {
+                            if (this._mockRecipes[recipe.name]) { if (this._failure) setTimeout(() => this._failure({ message: `Recipe "${recipe.name}" already exists.` }), 500); return; }
                             this._mockRecipes[recipe.name] = recipe.ingredients;
                             if (this._success) setTimeout(() => this._success("Recipe saved!"), 500);
                         },
-                        logDailyUsage: function(reportData) {
+                        logDailyUsage: function (reportData) {
                             console.log("MOCK: Logging daily usage", reportData);
-                            if(this._success) setTimeout(() => this._success("Report logged successfully."), 500);
+                            if (this._success) setTimeout(() => this._success("Report logged successfully."), 500);
                         }
                     }
                 }
@@ -225,6 +290,7 @@
         // --- GLOBAL STATE ---
         let masterInventoryData = {};
         let masterRecipeData = {};
+        let globalTransactionMode = 'OUT'; // Default to Stock OUT
 
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
@@ -247,18 +313,18 @@
                 .withFailureHandler(showError)
                 .getInitialData();
         }
-        
+
         // --- CONFIG & THEME ---
         function applyConfig(config) {
             const appName = config.AppName || "Gurukul Inventory";
             const primaryColor = config.PrimaryColor || '#f97316';
-            
+
             const darkenColor = (hex, percent) => {
                 let r = parseInt(hex.substring(1, 3), 16), g = parseInt(hex.substring(3, 5), 16), b = parseInt(hex.substring(5, 7), 16);
                 r = Math.min(255, Math.floor(r * (100 - percent) / 100));
                 g = Math.min(255, Math.floor(g * (100 - percent) / 100));
                 b = Math.min(255, Math.floor(b * (100 - percent) / 100));
-                return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
+                return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
             };
             const darkerColor = darkenColor(primaryColor, 10);
 
@@ -274,7 +340,7 @@
             ['inventory', 'menu', 'report'].forEach(tabId => {
                 document.getElementById(`${tabId}-tab`).classList.add('hidden');
                 document.querySelector(`button[onclick="changeTab('${tabId}')"]`).classList.remove('active');
-                 document.querySelector(`button[onclick="changeTab('${tabId}')"]`).classList.add('text-gray-500');
+                document.querySelector(`button[onclick="changeTab('${tabId}')"]`).classList.add('text-gray-500');
             });
             document.getElementById(`${tabName}-tab`).classList.remove('hidden');
             const button = document.querySelector(`button[onclick="changeTab('${tabName}')"]`);
@@ -287,21 +353,82 @@
             masterInventoryData = data;
             const listEl = document.getElementById('inventory-list');
             listEl.innerHTML = '';
+
+            // Populate Category Datalist
+            const categories = new Set();
+            Object.values(data).forEach(item => {
+                if (item.category) categories.add(item.category);
+            });
+            const datalist = document.getElementById('category-list');
+            datalist.innerHTML = '';
+            Array.from(categories).sort().forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                datalist.appendChild(option);
+            });
+
             if (Object.keys(data).length === 0) {
                 listEl.innerHTML = '<p class="text-center text-gray-500 py-4">No inventory items. Add one below!</p>';
             } else {
-                const header = `<div class="grid grid-cols-2 sm:grid-cols-3 gap-4 font-semibold text-gray-600 border-b pb-2 mb-2"><div class="sm:col-span-2">Item</div><div class="text-right">Current Stock</div></div>`;
-                listEl.innerHTML = header;
+                // Group by Category
+                const groupedData = {};
                 Object.keys(data).sort().forEach(name => {
                     const item = data[name];
-                    const row = document.createElement('div');
-                    row.className = 'grid grid-cols-2 sm:grid-cols-3 gap-4 items-center py-4 item-row cursor-pointer';
-                    row.setAttribute('onclick', `openModal('${name}', '${item.unit}')`);
-                    row.innerHTML = `<div class="sm:col-span-2 font-medium text-lg">${name}</div><div class="text-right text-xl font-bold">${item.quantity.toFixed(3)} <span class="text-sm text-gray-500">${item.unit}</span></div>`;
-                    listEl.appendChild(row);
+                    const category = item.category || 'Uncategorized';
+                    if (!groupedData[category]) groupedData[category] = [];
+                    groupedData[category].push({ name, ...item });
+                });
+
+                // Render Accordions
+                Object.keys(groupedData).sort().forEach(category => {
+                    const items = groupedData[category];
+
+                    const section = document.createElement('div');
+                    section.className = 'border rounded-lg mb-4 overflow-hidden';
+
+                    // Header
+                    const header = document.createElement('div');
+                    header.className = 'bg-gray-100 p-4 flex justify-between items-center cursor-pointer hover:bg-gray-200 transition-colors';
+                    header.onclick = () => toggleAccordion(header);
+                    header.innerHTML = `
+                        <h3 class="font-semibold text-lg text-gray-800">${category} <span class="text-sm font-normal text-gray-500 ml-2">(${items.length} items)</span></h3>
+                        <svg class="w-5 h-5 transform transition-transform duration-200 -rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    `;
+
+                    // Content
+                    const content = document.createElement('div');
+                    content.className = 'hidden bg-white divide-y';
+
+                    items.forEach(item => {
+                        const row = document.createElement('div');
+                        row.className = 'grid grid-cols-2 sm:grid-cols-3 gap-4 items-center p-4 hover:bg-gray-50 cursor-pointer';
+                        row.setAttribute('onclick', `openModal('${item.name}', '${item.unit}')`);
+                        row.innerHTML = `
+                            <div class="sm:col-span-2 font-medium text-lg">${item.name}</div>
+                            <div class="text-right text-xl font-bold">${item.quantity.toFixed(3)} <span class="text-sm text-gray-500">${item.unit}</span></div>
+                        `;
+                        content.appendChild(row);
+                    });
+
+                    section.appendChild(header);
+                    section.appendChild(content);
+                    listEl.appendChild(section);
                 });
             }
             showLoading(false);
+        }
+
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('svg');
+
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.remove('-rotate-90');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.add('-rotate-90');
+            }
         }
 
         // --- RECIPE DISPLAY & MANAGEMENT ---
@@ -312,7 +439,7 @@
             if (Object.keys(data).length === 0) {
                 recipeListEl.innerHTML = '<p class="text-gray-500">No menu items defined yet.</p>';
             } else {
-                 Object.keys(data).sort().forEach(name => {
+                Object.keys(data).sort().forEach(name => {
                     const ingredients = data[name];
                     let ingredientsHtml = ingredients.map(ing => `${ing.name} (${ing.quantity} ${ing.unit})`).join(', ');
                     const recipeEl = document.createElement('div');
@@ -322,7 +449,7 @@
                 });
             }
         }
-        
+
         function addIngredientRow() {
             const container = document.getElementById('ingredients-container');
             const row = document.createElement('div');
@@ -351,13 +478,13 @@
                 statusEl.textContent = 'Please provide a menu name and at least one valid ingredient.'; statusEl.className = 'text-center mt-4 text-sm text-red-500'; return;
             }
             if (masterRecipeData[name]) {
-                 statusEl.textContent = `Recipe "${name}" already exists.`; statusEl.className = 'text-center mt-4 text-sm text-red-500'; return;
+                statusEl.textContent = `Recipe "${name}" already exists.`; statusEl.className = 'text-center mt-4 text-sm text-red-500'; return;
             }
 
             const recipe = { name, ingredients };
             const btn = document.getElementById('saveRecipeBtn');
             btn.disabled = true; statusEl.textContent = `Saving "${name}"...`; statusEl.className = 'text-center mt-4 text-sm text-gray-500';
-            
+
             // Optimistic update
             masterRecipeData[name] = ingredients;
             displayRecipes(masterRecipeData);
@@ -407,11 +534,11 @@
             `;
             const selectEl = row.querySelector('.waste-item-select');
             populateInventoryItemSelect(selectEl);
-             selectEl.addEventListener('change', () => {
+            selectEl.addEventListener('change', () => {
                 const unitSpan = row.querySelector('.waste-unit');
                 const selectedItem = masterInventoryData[selectEl.value];
                 unitSpan.textContent = selectedItem ? selectedItem.unit : '';
-                if(selectedItem) row.querySelector('.waste-unit').textContent = selectedItem.unit;
+                if (selectedItem) row.querySelector('.waste-unit').textContent = selectedItem.unit;
             });
             container.appendChild(row);
         }
@@ -425,14 +552,14 @@
                 cookedItems: Array.from(document.querySelectorAll('.cooked-item-row')).map(r => ({ name: r.querySelector('.menu-item-select').value, servings: parseFloat(r.querySelector('.servings-quantity').value) })).filter(i => i.name && i.servings > 0),
                 wasteItems: Array.from(document.querySelectorAll('.waste-item-row')).map(r => ({ name: r.querySelector('.waste-item-select').value, quantity: parseFloat(r.querySelector('.waste-quantity').value) })).filter(i => i.name && i.quantity > 0)
             };
-             reportData.wasteItems.forEach(item => item.unit = masterInventoryData[item.name].unit);
+            reportData.wasteItems.forEach(item => item.unit = masterInventoryData[item.name].unit);
 
             if (!reportData.date || !reportData.people) { statusEl.textContent = "Please fill in Date and People Served."; statusEl.className = "text-center mt-4 text-sm text-red-500"; return; }
             if (reportData.cookedItems.length === 0 && reportData.wasteItems.length === 0) { statusEl.textContent = "Please add at least one cooked item or waste item."; statusEl.className = "text-center mt-4 text-sm text-red-500"; return; }
-            
+
             const btn = document.getElementById('submitReportBtn');
             btn.disabled = true; statusEl.textContent = 'Submitting report...'; statusEl.className = "text-center mt-4 text-sm text-gray-500";
-            
+
             // Clear form immediately for faster feedback
             document.getElementById('cooked-items-container').innerHTML = ''; addCookedItemRow();
             document.getElementById('waste-items-container').innerHTML = ''; addWasteItemRow();
@@ -442,7 +569,7 @@
                 .withSuccessHandler(response => {
                     statusEl.textContent = response; statusEl.className = "text-center mt-4 text-sm text-green-600";
                     // Refresh data in the background
-                    fetchInitialData(); 
+                    fetchInitialData();
                     setTimeout(() => { statusEl.textContent = ''; }, 4000);
                     btn.disabled = false;
                 })
@@ -465,17 +592,69 @@
 
         // --- UTILITIES (Modal, Add Item, Loading, Errors) ---
         let currentTransaction = {};
+
+        function setGlobalTransactionMode(mode) {
+            globalTransactionMode = mode;
+            const inBtn = document.getElementById('mode-in');
+            const outBtn = document.getElementById('mode-out');
+
+            if (mode === 'IN') {
+                inBtn.className = 'px-4 py-2 rounded-md transition-all shadow-sm bg-white text-gray-800';
+                outBtn.className = 'px-4 py-2 rounded-md transition-all text-gray-500 hover:text-gray-700';
+            } else {
+                outBtn.className = 'px-4 py-2 rounded-md transition-all shadow-sm bg-white text-gray-800';
+                inBtn.className = 'px-4 py-2 rounded-md transition-all text-gray-500 hover:text-gray-700';
+            }
+        }
+
         function openModal(itemName, itemUnit) {
-            currentTransaction = { itemName, itemUnit, type: null };
-            document.getElementById('modal-title').textContent = `Update: ${itemName}`;
-            const unitSelect = document.getElementById('modal-unit-select');
-            unitSelect.innerHTML = (itemUnit.toLowerCase() === 'kg') ? `<option value="kg">kg</option><option value="g">g</option>` : `<option value="${itemUnit}">${itemUnit}</option>`;
+            currentTransaction = { itemName, itemUnit, type: globalTransactionMode };
+
+            const modeText = globalTransactionMode === 'IN' ? 'Stock IN' : 'Stock OUT';
+            document.getElementById('modal-title').textContent = `${modeText}: ${itemName}`;
+
+            const modeDisplay = document.getElementById('modal-mode-display');
+            modeDisplay.textContent = modeText;
+            modeDisplay.className = globalTransactionMode === 'IN'
+                ? 'inline-block px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800'
+                : 'inline-block px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-800';
+
+            // Setup Unit Buttons
+            const unitContainer = document.getElementById('modal-unit-buttons');
+            unitContainer.innerHTML = '';
+
+            let units = [];
+            if (itemUnit.toLowerCase() === 'kg') {
+                units = ['kg', 'g'];
+            } else if (itemUnit.toLowerCase() === 'litre') {
+                units = ['litre', 'ml'];
+            } else {
+                units = [itemUnit];
+            }
+
+            // Default to the first unit (base unit)
+            currentTransaction.selectedUnit = units[0];
+
+            units.forEach(unit => {
+                const btn = document.createElement('button');
+                btn.textContent = unit.toUpperCase();
+                btn.className = `flex-1 py-2 rounded-lg font-medium border transition-colors ${unit === currentTransaction.selectedUnit
+                    ? 'bg-gray-800 text-white border-gray-800'
+                    : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'
+                    }`;
+                btn.onclick = () => selectModalUnit(unit);
+                unitContainer.appendChild(btn);
+            });
+
             document.getElementById('modal-quantity').value = '';
             document.getElementById('modal-error').textContent = '';
-            setTransactionType(null); // Reset buttons
+
             const modal = document.getElementById('transaction-modal');
             modal.classList.remove('hidden', 'opacity-0');
             modal.firstElementChild.classList.remove('scale-95');
+
+            // Auto-focus quantity input
+            setTimeout(() => document.getElementById('modal-quantity').focus(), 100);
         }
         function closeModal() {
             const modal = document.getElementById('transaction-modal');
@@ -483,39 +662,44 @@
             modal.firstElementChild.classList.add('scale-95');
             setTimeout(() => modal.classList.add('hidden'), 300);
         }
-        function setTransactionType(type) {
-            currentTransaction.type = type;
-            const inBtn = document.getElementById('modal-type-in');
-            const outBtn = document.getElementById('modal-type-out');
-            inBtn.className = type === 'IN' ? 'bg-green-500 text-white font-semibold py-3 rounded-lg' : 'bg-gray-200 text-gray-800 font-semibold py-3 rounded-lg';
-            outBtn.className = type === 'OUT' ? 'bg-red-500 text-white font-semibold py-3 rounded-lg' : 'bg-gray-200 text-gray-800 font-semibold py-3 rounded-lg';
+
+        function selectModalUnit(unit) {
+            currentTransaction.selectedUnit = unit;
+            const buttons = document.getElementById('modal-unit-buttons').children;
+            Array.from(buttons).forEach(btn => {
+                if (btn.textContent.toLowerCase() === unit.toLowerCase()) {
+                    btn.className = 'flex-1 py-2 rounded-lg font-medium border transition-colors bg-gray-800 text-white border-gray-800';
+                } else {
+                    btn.className = 'flex-1 py-2 rounded-lg font-medium border transition-colors bg-white text-gray-600 border-gray-300 hover:bg-gray-50';
+                }
+            });
         }
 
         document.getElementById('modal-submit-btn').addEventListener('click', () => {
             const quantityInput = parseFloat(document.getElementById('modal-quantity').value);
-            const selectedUnit = document.getElementById('modal-unit-select').value;
+            const selectedUnit = currentTransaction.selectedUnit;
             const modalError = document.getElementById('modal-error');
             if (!currentTransaction.type) { modalError.textContent = 'Please select a transaction type (IN or OUT).'; return; }
             if (isNaN(quantityInput) || quantityInput <= 0) { modalError.textContent = 'Please enter a valid, positive quantity.'; return; }
-            
+
             let quantityInBaseUnit = quantityInput;
             if (currentTransaction.itemUnit.toLowerCase() === 'kg' && selectedUnit.toLowerCase() === 'g') {
                 quantityInBaseUnit = quantityInput / 1000;
             }
-            
+
             const originalQuantity = masterInventoryData[currentTransaction.itemName].quantity;
             const submitBtn = document.getElementById('modal-submit-btn');
             submitBtn.disabled = true; modalError.textContent = '';
-            
+
             // Optimistic Update
-            if(currentTransaction.type === 'IN') {
+            if (currentTransaction.type === 'IN') {
                 masterInventoryData[currentTransaction.itemName].quantity += quantityInBaseUnit;
             } else {
                 masterInventoryData[currentTransaction.itemName].quantity -= quantityInBaseUnit;
             }
             displayInventory(masterInventoryData);
             closeModal();
-            
+
             // Background Sync
             google.script.run
                 .withSuccessHandler(() => {
@@ -533,6 +717,7 @@
 
         document.getElementById('addItemBtn').addEventListener('click', () => {
             const name = document.getElementById('newItemName').value.trim();
+            const category = document.getElementById('newItemCategory').value.trim();
             const unit = document.getElementById('newItemUnit').value;
             const statusEl = document.getElementById('add-item-status');
 
@@ -543,11 +728,12 @@
             btn.disabled = true;
             statusEl.textContent = `Adding "${name}"...`;
             statusEl.className = "text-center mt-4 text-sm text-gray-500";
-            
+
             // Optimistic UI Update
-            masterInventoryData[name] = { quantity: 0, unit: unit };
+            masterInventoryData[name] = { quantity: 0, unit: unit, category: category };
             displayInventory(masterInventoryData);
             document.getElementById('newItemName').value = '';
+            document.getElementById('newItemCategory').value = '';
 
             // Background Sync
             google.script.run
@@ -566,13 +752,13 @@
                     displayInventory(masterInventoryData);
                     btn.disabled = false;
                 })
-                .addNewItem(name, unit);
+                .addNewItem(name, unit, category);
         });
 
         function showLoading(isLoading) {
             document.getElementById('loading').classList.toggle('hidden', !isLoading);
-            if(!isLoading) {
-                 document.getElementById('inventory-list').classList.remove('hidden');
+            if (!isLoading) {
+                document.getElementById('inventory-list').classList.remove('hidden');
             }
         }
         function showError(error) {
@@ -586,5 +772,5 @@
     </script>
 
 </body>
-</html>
 
+</html>

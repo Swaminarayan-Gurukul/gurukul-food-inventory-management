@@ -12,7 +12,11 @@ export function getInventorySummary() {
     const inventorySummary = {};
 
     Object.keys(masterItems).forEach(name => {
-      inventorySummary[name] = { quantity: 0, unit: masterItems[name] };
+      inventorySummary[name] = { 
+        quantity: 0, 
+        unit: masterItems[name].unit,
+        category: masterItems[name].category
+      };
     });
 
     const transactionSheet = SS.getSheetByName(TRANSACTION_SHEET_NAME);
